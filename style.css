@@ -252,6 +252,7 @@ h3 {
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 18px;
+  padding: 0 22px;
 }
 
 .entry-form {
@@ -406,22 +407,17 @@ button:disabled {
   margin-top: 14px;
 }
 
-/* 剧集表格列宽分配 */
-#dramaTable th:nth-child(1), #dramaTable td:nth-child(1) { width: 15%; }
-#dramaTable th:nth-child(2), #dramaTable td:nth-child(2) { width: 8%; }
-#dramaTable th:nth-child(3), #dramaTable td:nth-child(3) { width: 12%; }
-#dramaTable th:nth-child(4), #dramaTable td:nth-child(4) { width: 12%; }
-#dramaTable th:nth-child(5), #dramaTable td:nth-child(5) { width: 15%; }
-#dramaTable th:nth-child(6), #dramaTable td:nth-child(6) { width: 28%; }
-#dramaTable th:nth-child(7), #dramaTable td:nth-child(7) { width: 10%; }
-
-/* 工具表格列宽分配 */
-#toolTable th:nth-child(1), #toolTable td:nth-child(1) { width: 14%; }
-#toolTable th:nth-child(2), #toolTable td:nth-child(2) { width: 12%; }
-#toolTable th:nth-child(3), #toolTable td:nth-child(3) { width: 14%; }
-#toolTable th:nth-child(4), #toolTable td:nth-child(4) { width: 36%; }
-#toolTable th:nth-child(5), #toolTable td:nth-child(5) { width: 14%; }
-#toolTable th:nth-child(6), #toolTable td:nth-child(6) { width: 10%; }
+/* 让表格突破 panel padding 铺满左右边缘 */
+.panel .table-wrap {
+  margin-left: -22px;
+  margin-right: -22px;
+  margin-top: 14px;
+  margin-bottom: -22px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0 0 14px 14px;
+}
 
 .member-workspace {
   display: grid;
