@@ -575,12 +575,10 @@ function addMember(member) {
 
 function deleteSelectedMember() {
   const member = els.workMemberSelect.value;
-  console.log("[delete] member=", member, "state.members=", state.members);
   if (!member || member === "__new__") {
     return;
   }
   state.members = state.members.filter((item) => item !== member);
-  console.log("[delete] after filter=", state.members);
   if (selectedWorkMember === member) {
     selectedWorkMember = "";
   }
@@ -972,11 +970,9 @@ function normalizeState(saved) {
   }));
   const dramas = (Array.isArray(saved.dramas) ? saved.dramas : []).map((item) => ({ ...item, progress: clamp(Number(item.progress || 0), 0, 100) }));
   const tools = Array.isArray(saved.tools) ? saved.tools : [];
-  const members = [
-    ...(Array.isArray(saved.members) ? saved.members : []),
-    ...work.map((item) => item.member),
-    ...tools.map((item) => item.member),
-  ]
+  const members = (
+    Array.isArray(saved.members) ? saved.members : []
+  )
     .filter(Boolean)
     .map((member) => String(member).trim())
     .filter(Boolean);
