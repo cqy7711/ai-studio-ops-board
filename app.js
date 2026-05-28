@@ -38,6 +38,8 @@ const els = {
   weeklyTokens: document.querySelector("#weeklyTokens"),
   activeDramaCount: document.querySelector("#activeDramaCount"),
   toolChart: document.querySelector("#toolChart"),
+  dramaDetailSelect: document.querySelector("#dramaDetailSelect"),
+  dramaDetailContent: document.querySelector("#dramaDetailContent"),
   memberBoard: document.querySelector("#memberBoard"),
   seedDemo: document.querySelector("#seedDemo"),
   boardButtons: document.querySelectorAll("[data-board]"),
@@ -295,6 +297,111 @@ function renderDramas() {
       `,
     )
     .join("");
+
+  syncDramaDetailSelect();
+}
+
+function syncDramaDetailSelect() {
+  const titles = [...new Set(state.dramas.map(d => d.title))];
+  const currentVal = els.dramaDetailSelect.value;
+  els.dramaDetailSelect.innerHTML = '<option value="">-- 请选择一部剧 --</option>' +
+    titles.map(t => `<option value="${escapeHtml(t)}" ${t === currentVal ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('');
+  if (currentVal) renderDramaDetail(currentVal);
+}
+
+els.dramaDetailSelect.addEventListener("change", function() {
+  renderDramaDetail(this.value);
+});
+
+function renderDramaDetail(title) {
+  if (!title) {
+    els.dramaDetailContent.innerHTML = '<p style="color:var(--muted);font-size:13px;text-align:center;padding-top:40px;">请选择一部剧查看详情</p>';
+    return;
+  }
+
+  const items = state.dramas.filter(d => d.title === title);
+  if (!items.length) {
+    els.dramaDetailContent.innerHTML = '<p style="color:var(--muted);font-size:13px;">暂无数据</p>';
+    return;
+  }
+
+  const totalEpisodes = items.length;
+  const avgProgress = Math.round(items.reduce((s, i) => s + Number(i.progress), 0) / totalEpisodes);
+  const stages = {};
+  const owners = new Set();
+  items.forEach(i => {
+    stages[i.stage] = (stages[i.stage] || 0) + 1;
+    owners.add(i.owner);
+  });
+
+  const stageOrder = ["剧本","分镜","画面生成","配音配乐","剪辑","发布"];
+  const sortedStages = Object.entries(stages).sort((a,b) => stageOrder.indexOf(a[0]) - stageOrder.indexOf(b[0]));
+
+  let progressColor = "#d1d5db";
+  if (avgProgress >= 80) progressColor = "#22c55e";
+  else if (avgProgress >= 40) progressColor = "#f59e0b";
+  else if (avgProgress > 0) progressColor = "#3b82f6";
+
+  els.dramaDetailContent.innerHTML = `
+    <div class="drama-detail-card">
+      <div class="card-title">${escapeHtml(title)}</div>
+      <div class="card-row"><span class="card-label">总集数</span><span class="card-value">${totalEpisodes} 集</span></div>
+      <div class="card-row"><span class="card-label">平均进度</span><span class="card-value" style="color:${progressColor};font-size:16px;">${avgProgress}%</span></div>
+      <div style="margin-top:8px;height:10px;background:#eef2f5;border-radius:999px;overflow:hidden;">
+        <div style="width:${avgProgress}%;height:100%;background:${progressColor};border-radius:999px;transition:width 0.3s;"></div>
+      </div>
+      <div class="card-row" style="margin-top:8px;"><span class="card-label">负责人</span><span class="card-value">${escapeHtml([...owners].join("、"))}</span></div>
+      <div class="card-row"><span class="card-label">最新截止</span><span class="card-value">${items.sort((a,b)=>b.deadline.localeCompare(a.deadline))[0]?.deadline || '-'}</span></div>
+    </div>
+
+    <div class="drama-detail-card">
+      <div class="card-title" style="font-size:14px;margin-bottom:12px;">📊 各阶段分布</div>
+      <div class="drama-stage-list">
+        ${sortedStages.map(([stage, count]) => {
+          const stageItems = items.filter(i => i.stage === stage);
+          const stageAvg = Math.round(stageItems.reduce((s,i) => s + Number(i.progress), 0) / stageItems.length);
+          let dotClass = "pending";
+          if (stageAvg >= 80) dotClass = "done";
+          else if (stageAvg > 0) dotClass = "ongoing";
+          return `
+            <div class="drama-stage-item">
+              <div class="drama-stage-name">
+                <span class="stage-dot ${dotClass}"></span>
+                <span>${escapeHtml(stage)}</span>
+              </div>
+              <span style="color:var(--muted);">${count} 集 · 平均 ${stageAvg}%</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="drama-detail-card">
+      <div class="card-title" style="font-size:14px;margin-bottom:12px;">📋 各集明细</div>
+      <div style="max-height:240px;overflow-y:auto;">
+        ${items.sort((a,b) => a.episode - b.episode).map(item => {
+          let pColor = "#d1d5db";
+          if (item.progress >= 80) pColor = "#22c55e";
+          else if (item.progress >= 40) pColor = "#f59e0b";
+          else if (item.progress > 0) pColor = "#3b82f6";
+          return `
+            <div class="drama-stage-item">
+              <div class="drama-stage-name">
+                <span class="stage-dot ${item.progress>=80?'done':item.progress>0?'ongoing':'pending'}"></span>
+                <span>第${item.episode}集 · ${item.stage}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:50px;height:6px;background:#eef2f5;border-radius:999px;overflow:hidden;">
+                  <div style="width:${item.progress}%;height:100%;background:${pColor};border-radius:999px;"></div>
+                </div>
+                <span style="font-weight:600;color:${pColor};min-width:36px;text-align:right;font-size:12px;">${item.progress}%</span>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
 }
 
 function renderTools() {
