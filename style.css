@@ -521,111 +521,122 @@ button:disabled {
 
 .work-item-list {
   display: grid;
-  min-width: 0;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 16px;
 }
 
-.work-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  min-width: 0;
-  padding: 16px;
+.work-card {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 10px;
   background: #ffffff;
   transition: box-shadow 0.2s ease;
+  overflow: hidden;
 }
 
-.work-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.work-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.work-item-main {
-  min-width: 0;
-}
-
-.work-item-header {
+.work-card-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-.work-role-tag,
-.work-status-tag,
-.work-priority-tag {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
+.work-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.work-role-tag {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
   font-weight: 600;
 }
 
-.work-priority-tag {
-  background: #f3f4f6;
-  color: #6b7280;
-}
-
-.work-task {
-  margin: 0 0 8px;
-  font-size: 16px;
-  font-weight: 700;
+.work-card-task {
+  flex: 1;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
   color: #1f2937;
   line-height: 1.4;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
-.work-index {
-  display: inline-flex;
+.work-card-footer {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.work-status-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #e5e7eb;
-  color: #374151;
+}
+
+.work-card-progress {
   font-size: 12px;
   font-weight: 700;
-  flex-shrink: 0;
+  color: #374151;
 }
 
-.work-meta {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.work-item-side {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  align-items: start;
-}
-
-.work-item-side .delete-btn {
-  grid-column: 1 / -1;
-  justify-self: center;
-  min-height: 20px;
-  padding: 2px 6px;
-  font-size: 10px;
-}
-
-.side-cell {
+.work-card-actions {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 4px;
-  padding: 8px 6px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: #f8fbfd;
+  margin-top: 6px;
 }
 
-.side-cell > label {
+.work-card-actions input {
+  width: 40px;
+  padding: 2px 4px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
   font-size: 10px;
-  color: var(--muted);
-  white-space: nowrap;
+  text-align: center;
+}
+
+.work-card-actions select {
+  flex: 1;
+  padding: 2px 4px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+.work-card-actions button {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid #f0cbc8;
+  border-radius: 4px;
+  background: #fff7f6;
+  color: var(--red);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
 }
 
 table {

@@ -624,31 +624,25 @@ function workItemMarkup(item, index) {
   const statusColor = statusColors[item.status] || statusColors["进行中"];
   
   return `
-    <div class="work-item" style="border-left: 4px solid ${roleColor}">
-      <div class="work-item-main">
-        <div class="work-item-header">
-          <span class="work-role-tag" style="background: ${roleColor}20; color: ${roleColor}">${escapeHtml(item.role)}</span>
-          <span class="work-status-tag" style="background: ${statusColor}15; color: ${statusColor}">${escapeHtml(item.status)}</span>
-          <span class="work-priority-tag">${escapeHtml(item.priority || "中")}优先</span>
-        </div>
-        <p class="work-task"><span class="work-index">${index + 1}</span>${escapeHtml(item.task)}</p>
-        <p class="work-meta">预计 ${Number(item.estimatedHours || 0).toFixed(1)} 小时</p>
+    <div class="work-card" style="border-top: 3px solid ${roleColor}">
+      <div class="work-card-header">
+        <span class="work-num">${index + 1}</span>
+        <span class="work-role-tag" style="background: ${roleColor}20; color: ${roleColor}">${escapeHtml(item.role)}</span>
       </div>
-      <div class="work-item-side">
-        <div class="side-cell">
-          <label>完成度</label>
-          <input type="number" min="0" max="100" value="${item.progress}" onchange="updateWorkProgress('${item.id}', this.value)" style="width:40px;padding:2px 4px;font-size:12px;text-align:center" />
-        </div>
-        <div class="side-cell">
-          <label>状态</label>
-          <select class="status-editor" onchange="updateWorkStatus('${item.id}', this.value)" style="padding:2px;font-size:11px">
-            <option value="进行中" ${item.status === "进行中" ? "selected" : ""}>进行中</option>
-            <option value="待审核" ${item.status === "待审核" ? "selected" : ""}>待审核</option>
-            <option value="已完成" ${item.status === "已完成" ? "selected" : ""}>已完成</option>
-            <option value="有风险" ${item.status === "有风险" ? "selected" : ""}>有风险</option>
-          </select>
-        </div>
-        <button class="delete-btn" type="button" onclick="removeItem('work', '${item.id}')">删除</button>
+      <p class="work-card-task">${escapeHtml(item.task)}</p>
+      <div class="work-card-footer">
+        <span class="work-status-dot" style="background: ${statusColor}" title="${escapeHtml(item.status)}"></span>
+        <span class="work-card-progress">${item.progress}%</span>
+      </div>
+      <div class="work-card-actions">
+        <input type="number" min="0" max="100" value="${item.progress}" onchange="updateWorkProgress('${item.id}', this.value)" title="完成度" />
+        <select onchange="updateWorkStatus('${item.id}', this.value)" title="状态">
+          <option value="进行中" ${item.status === "进行中" ? "selected" : ""}>进行中</option>
+          <option value="待审核" ${item.status === "待审核" ? "selected" : ""}>待审核</option>
+          <option value="已完成" ${item.status === "已完成" ? "selected" : ""}>已完成</option>
+          <option value="有风险" ${item.status === "有风险" ? "selected" : ""}>有风险</option>
+        </select>
+        <button type="button" onclick="removeItem('work', '${item.id}')" title="删除">×</button>
       </div>
     </div>
   `;
