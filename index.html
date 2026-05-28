@@ -227,21 +227,33 @@
             </label>
             <button type="submit" class="form-submit">新增剧集记录</button>
           </form>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>剧名</th>
-                  <th>集数</th>
-                  <th>阶段</th>
-                  <th>负责人</th>
-                  <th>截止日期</th>
-                  <th>进度(可调)</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody id="dramaTable"></tbody>
-            </table>
+          <div class="drama-layout">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>剧名</th>
+                    <th>集数</th>
+                    <th>阶段</th>
+                    <th>负责人</th>
+                    <th>截止日期</th>
+                    <th>进度(可调)</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="dramaTable"></tbody>
+              </table>
+            </div>
+            <div class="drama-panel">
+              <h3>📋 剧集详情看板</h3>
+              <label style="display:block;margin-bottom:12px;">
+                <span style="font-size:13px;color:var(--muted);margin-bottom:4px;display:block;">选择剧集</span>
+                <select id="dramaDetailSelect" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff;">
+                  <option value="">-- 请选择一部剧 --</option>
+                </select>
+              </label>
+              <div id="dramaDetailContent" style="min-height:200px;"></div>
+            </div>
           </div>
         </section>
 
