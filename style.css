@@ -110,7 +110,7 @@ button {
 }
 
 .workspace {
-  width: min(1400px, 100%);
+  width: 100%;
   padding: 28px;
 }
 
@@ -647,7 +647,6 @@ button:disabled {
 
 table {
   width: 100%;
-  min-width: 820px;
   border-collapse: collapse;
 }
 
