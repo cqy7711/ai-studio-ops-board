@@ -597,52 +597,35 @@ button:disabled {
 }
 
 .work-item-side {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-end;
-  min-width: 140px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  align-items: start;
 }
 
 .work-item-side .delete-btn {
-  align-self: flex-end;
-  min-height: 24px;
-  padding: 3px 8px;
-  font-size: 11px;
+  grid-column: 1 / -1;
+  justify-self: center;
+  min-height: 20px;
+  padding: 2px 6px;
+  font-size: 10px;
 }
 
 .side-cell {
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #f8fbfd;
-  width: 100%;
-}
-
-.progress-cell {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
-
-.progress-inline {
-  display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.progress-inline .progress-track {
-  flex: 1;
-  min-width: 0;
-}
-
-.progress-inline input {
-  width: 50px;
-  padding: 4px 6px;
+  gap: 4px;
+  padding: 8px 6px;
   border: 1px solid var(--line);
-  border-radius: 4px;
-  font-size: 13px;
-  text-align: center;
+  border-radius: 6px;
+  background: #f8fbfd;
+}
+
+.side-cell > label {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 table {

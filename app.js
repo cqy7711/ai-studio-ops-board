@@ -635,16 +635,13 @@ function workItemMarkup(item, index) {
         <p class="work-meta">预计 ${Number(item.estimatedHours || 0).toFixed(1)} 小时</p>
       </div>
       <div class="work-item-side">
-        <div class="side-cell progress-cell">
+        <div class="side-cell">
           <label>完成度</label>
-          <div class="progress-inline">
-            ${progressMarkup(item.progress)}
-            <input type="number" min="0" max="100" value="${item.progress}" onchange="updateWorkProgress('${item.id}', this.value)" />
-          </div>
+          <input type="number" min="0" max="100" value="${item.progress}" onchange="updateWorkProgress('${item.id}', this.value)" style="width:40px;padding:2px 4px;font-size:12px;text-align:center" />
         </div>
         <div class="side-cell">
           <label>状态</label>
-          <select class="status-editor" onchange="updateWorkStatus('${item.id}', this.value)">
+          <select class="status-editor" onchange="updateWorkStatus('${item.id}', this.value)" style="padding:2px;font-size:11px">
             <option value="进行中" ${item.status === "进行中" ? "selected" : ""}>进行中</option>
             <option value="待审核" ${item.status === "待审核" ? "selected" : ""}>待审核</option>
             <option value="已完成" ${item.status === "已完成" ? "selected" : ""}>已完成</option>
