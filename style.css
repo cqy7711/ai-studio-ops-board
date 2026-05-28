@@ -606,6 +606,9 @@ button:disabled {
 
 .work-item-side .delete-btn {
   align-self: flex-end;
+  min-height: 24px;
+  padding: 3px 8px;
+  font-size: 11px;
 }
 
 .side-cell {
