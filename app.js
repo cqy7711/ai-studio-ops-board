@@ -605,14 +605,43 @@ function memberInitial(member) {
 }
 
 function workItemMarkup(item, index) {
+  const roleColors = {
+    "剧本": "#8b5cf6",
+    "脚本": "#3b82f6",
+    "分镜": "#10b981",
+    "抽卡": "#f59e0b",
+    "视频剪辑": "#ef4444",
+    "运营": "#ec4899",
+    "自定义": "#6b7280"
+  };
+  const statusColors = {
+    "进行中": "#3b82f6",
+    "待审核": "#f59e0b",
+    "已完成": "#10b981",
+    "有风险": "#ef4444"
+  };
+  const roleColor = roleColors[item.role] || roleColors["自定义"];
+  const statusColor = statusColors[item.status] || statusColors["进行中"];
+  
   return `
-    <div class="work-item">
-      <div>
-        <strong>${escapeHtml(workRole(item))}</strong>
-        <p class="work-task"><b>${index + 1}. ${escapeHtml(item.task)}</b></p>
-        <p class="work-meta">${escapeHtml(item.priority || "中")}优先 · ${Number(item.estimatedHours || 0).toFixed(1)}小时</p>
+    <div class="work-item" style="border-left: 4px solid ${roleColor}">
+      <div class="work-item-main">
+        <div class="work-item-header">
+          <span class="work-role-tag" style="background: ${roleColor}20; color: ${roleColor}">${escapeHtml(item.role)}</span>
+          <span class="work-status-tag" style="background: ${statusColor}15; color: ${statusColor}">${escapeHtml(item.status)}</span>
+          <span class="work-priority-tag">${escapeHtml(item.priority || "中")}优先</span>
+        </div>
+        <p class="work-task"><span class="work-index">${index + 1}</span>${escapeHtml(item.task)}</p>
+        <p class="work-meta">预计 ${Number(item.estimatedHours || 0).toFixed(1)} 小时</p>
       </div>
       <div class="work-item-side">
+        <div class="side-cell progress-cell">
+          <label>完成度</label>
+          <div class="progress-inline">
+            ${progressMarkup(item.progress)}
+            <input type="number" min="0" max="100" value="${item.progress}" onchange="updateWorkProgress('${item.id}', this.value)" />
+          </div>
+        </div>
         <div class="side-cell">
           <label>状态</label>
           <select class="status-editor" onchange="updateWorkStatus('${item.id}', this.value)">
@@ -621,15 +650,6 @@ function workItemMarkup(item, index) {
             <option value="已完成" ${item.status === "已完成" ? "selected" : ""}>已完成</option>
             <option value="有风险" ${item.status === "有风险" ? "selected" : ""}>有风险</option>
           </select>
-        </div>
-        <div class="side-cell mini-progress">
-          <label>进度展示</label>
-          ${progressMarkup(item.progress)}
-        </div>
-        <div class="side-cell inline-editor">
-          <label>完成度
-            <input type="number" min="0" max="100" value="${item.progress}" onchange="updateWorkProgress('${item.id}', this.value)" />
-          </label>
         </div>
         <button class="delete-btn" type="button" onclick="removeItem('work', '${item.id}')">删除</button>
       </div>
