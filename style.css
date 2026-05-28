@@ -402,21 +402,7 @@ button:disabled {
 .table-wrap {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid var(--line);
-  border-radius: 8px;
   margin-top: 14px;
-}
-
-/* 让表格突破 panel padding 铺满左右边缘 */
-.panel .table-wrap {
-  margin-left: -22px;
-  margin-right: -22px;
-  margin-top: 14px;
-  margin-bottom: -22px;
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
-  border-radius: 0 0 14px 14px;
 }
 
 .member-workspace {
