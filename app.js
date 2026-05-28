@@ -575,10 +575,12 @@ function addMember(member) {
 
 function deleteSelectedMember() {
   const member = els.workMemberSelect.value;
+  console.log("[delete] member=", member, "state.members=", state.members);
   if (!member || member === "__new__") {
     return;
   }
   state.members = state.members.filter((item) => item !== member);
+  console.log("[delete] after filter=", state.members);
   if (selectedWorkMember === member) {
     selectedWorkMember = "";
   }
