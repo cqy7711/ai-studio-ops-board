@@ -557,16 +557,35 @@ button:disabled {
   color: var(--muted);
 }
 
+.work-task {
+  font-weight: 800;
+}
+
 .work-item-side {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   min-width: 0;
   gap: 10px;
-  align-items: center;
+  align-items: start;
 }
 
 .work-item-side > * {
   min-width: 0;
+}
+
+.side-cell {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fbfd;
+}
+
+.side-cell > label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .mini-progress .progress-label {
@@ -586,6 +605,11 @@ button:disabled {
 .inline-editor input {
   min-height: 34px;
   margin-top: 6px;
+}
+
+.work-item-side .delete-btn {
+  grid-column: 1 / -1;
+  justify-self: start;
 }
 
 table {
@@ -944,7 +968,7 @@ tbody tr:last-child td {
   }
 
   .work-item-side {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

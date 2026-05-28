@@ -263,7 +263,7 @@ function renderWork() {
       </header>
       ${progressMarkup(average)}
       <div class="work-item-list">
-        ${items.map(workItemMarkup).join("")}
+        ${items.map((item, index) => workItemMarkup(item, index)).join("")}
       </div>
     </article>
   `;
@@ -604,28 +604,34 @@ function memberInitial(member) {
   return text ? text.charAt(0) : "人";
 }
 
-function workItemMarkup(item) {
+function workItemMarkup(item, index) {
   return `
     <div class="work-item">
       <div>
         <strong>${escapeHtml(workRole(item))}</strong>
-        <p>${escapeHtml(item.task)}</p>
+        <p class="work-task"><b>${index + 1}. ${escapeHtml(item.task)}</b></p>
         <p class="work-meta">${escapeHtml(item.priority || "中")}优先 · ${Number(item.estimatedHours || 0).toFixed(1)}小时</p>
       </div>
       <div class="work-item-side">
-        <select class="status-editor" onchange="updateWorkStatus('${item.id}', this.value)">
-          <option value="进行中" ${item.status === "进行中" ? "selected" : ""}>进行中</option>
-          <option value="待审核" ${item.status === "待审核" ? "selected" : ""}>待审核</option>
-          <option value="已完成" ${item.status === "已完成" ? "selected" : ""}>已完成</option>
-          <option value="有风险" ${item.status === "有风险" ? "selected" : ""}>有风险</option>
-        </select>
-        <div class="mini-progress">${progressMarkup(item.progress)}</div>
-        <div class="inline-editor">
+        <div class="side-cell">
+          <label>状态</label>
+          <select class="status-editor" onchange="updateWorkStatus('${item.id}', this.value)">
+            <option value="进行中" ${item.status === "进行中" ? "selected" : ""}>进行中</option>
+            <option value="待审核" ${item.status === "待审核" ? "selected" : ""}>待审核</option>
+            <option value="已完成" ${item.status === "已完成" ? "selected" : ""}>已完成</option>
+            <option value="有风险" ${item.status === "有风险" ? "selected" : ""}>有风险</option>
+          </select>
+        </div>
+        <div class="side-cell mini-progress">
+          <label>进度展示</label>
+          ${progressMarkup(item.progress)}
+        </div>
+        <div class="side-cell inline-editor">
           <label>完成度
             <input type="number" min="0" max="100" value="${item.progress}" onchange="updateWorkProgress('${item.id}', this.value)" />
           </label>
-          <button class="delete-btn" type="button" onclick="removeItem('work', '${item.id}')">删除</button>
         </div>
+        <button class="delete-btn" type="button" onclick="removeItem('work', '${item.id}')">删除</button>
       </div>
     </div>
   `;
