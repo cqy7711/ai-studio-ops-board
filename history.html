@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>每日工作记录历史看板</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="workspace" style="margin: 0 auto;">
+      <section class="panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">History Board</p>
+            <h2>每日工作记录历史看板</h2>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="ghost-button" type="button" id="exportExcel">导出Excel</button>
+            <a class="ghost-button history-link" href="./index.html">返回主页</a>
+          </div>
+        </div>
+        <form class="history-filter" id="historyFilterForm">
+          <label>
+            <span>成员筛选</span>
+            <select id="historyMemberFilter" name="member">
+              <option value="">全部成员</option>
+            </select>
+          </label>
+          <label>
+            <span>开始日期</span>
+            <input type="date" id="historyStartDate" name="startDate" />
+          </label>
+          <label>
+            <span>结束日期</span>
+            <input type="date" id="historyEndDate" name="endDate" />
+          </label>
+          <button type="button" class="ghost-button" id="resetHistoryFilter">重置筛选</button>
+        </form>
+        <div class="history-grid" id="historyBoard"></div>
+      </section>
+    </main>
+    <script src="./history.js"></script>
+  </body>
+</html>

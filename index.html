@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI短视频制作团队进度管理</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="主导航">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img">
+              <path d="M4 5.8C4 4.8 4.8 4 5.8 4h12.4c1 0 1.8.8 1.8 1.8v12.4c0 1-.8 1.8-1.8 1.8H5.8c-1 0-1.8-.8-1.8-1.8V5.8Z" />
+              <path d="m10 8 6 4-6 4V8Z" />
+            </svg>
+          </div>
+          <div>
+            <strong>AI Studio Ops</strong>
+            <span>短视频制作调度台</span>
+          </div>
+        </div>
+        <nav class="nav-list">
+          <a href="#today">今日工作</a>
+          <a href="#dramas">剧集记录</a>
+          <a href="#tools">工具消耗</a>
+          <a href="#board">团队看板</a>
+          <a href="./history.html">历史记录</a>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <div class="live-status-bar" id="liveStatusBar" role="status" aria-live="polite">
+          <strong>协同状态</strong>
+          <span id="liveStatusText">未连接在线协同</span>
+        </div>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Daily Production Board</p>
+            <h1>AI短视频制作团队工作与进度管理</h1>
+          </div>
+          <div class="date-chip">
+            <span id="currentDate"></span>
+          </div>
+        </header>
+
+        <section class="metric-grid" aria-label="核心指标">
+          <article class="metric">
+            <span>今日平均完成度</span>
+            <strong id="avgProgress">0%</strong>
+            <small id="avgProgressHint">等待团队填写</small>
+          </article>
+          <article class="metric">
+            <span>今日任务数</span>
+            <strong id="todayTaskCount">0</strong>
+            <small>已记录的工作条目</small>
+          </article>
+          <article class="metric">
+            <span>本周Token</span>
+            <strong id="weeklyTokens">0</strong>
+            <small>按工具记录汇总</small>
+          </article>
+          <article class="metric">
+            <span>进行中剧集</span>
+            <strong id="activeDramaCount">0</strong>
+            <small>未完成制作项目</small>
+          </article>
+        </section>
+
+        <section class="panel collab-panel" id="collab">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Live Collaboration</p>
+              <h2>多人在线填写设置</h2>
+            </div>
+            <span id="collabStatus" class="status">未连接</span>
+          </div>
+          <form class="entry-form collab-form" id="collabForm">
+            <label>
+              <span>Supabase URL</span>
+              <input type="url" name="url" id="collabUrl" placeholder="https://xxxx.supabase.co" required />
+            </label>
+            <label>
+              <span>Supabase Anon Key</span>
+              <input type="text" name="anonKey" id="collabAnonKey" placeholder="输入 anon public key" required />
+            </label>
+            <label>
+              <span>房间名</span>
+              <input type="text" name="room" id="collabRoom" placeholder="例如：ai-video-team" required />
+            </label>
+            <button type="submit" class="form-submit">连接在线协同</button>
+            <button type="button" class="ghost-button" id="collabDisconnect">断开连接</button>
+            <button type="button" class="ghost-button" id="copyCollabLink">复制协同链接</button>
+            <p class="form-help">先连接在线协同，再复制链接发给团队成员。成员打开链接后会自动填入配置。</p>
+          </form>
+        </section>
+
+        <section class="panel" id="today">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Daily Work</p>
+              <h2>每日工作安排和进度</h2>
+            </div>
+            <button class="ghost-button" type="button" id="seedDemo">填充示例</button>
+          </div>
+          <div class="daily-layout">
+            <form class="entry-form work-entry-form" id="workForm">
+              <label class="member-field">
+                <span>成员</span>
+                <div class="member-control">
+                  <select name="memberSelect" id="workMemberSelect" required>
+                    <option value="__new__">新增成员</option>
+                  </select>
+                  <button class="delete-btn" type="button" id="deleteMember">删除成员</button>
+                </div>
+              </label>
+              <label class="hidden-field" id="newMemberField">
+                <span>新增成员</span>
+                <input name="member" placeholder="填写成员名字" />
+              </label>
+              <label>
+                <span>日期</span>
+                <input type="date" name="date" required />
+              </label>
+              <label>
+                <span>流程角色</span>
+                <select name="role" id="workRole" required>
+                  <option value="剧本">剧本</option>
+                  <option value="脚本">脚本</option>
+                  <option value="分镜">分镜</option>
+                  <option value="抽卡">抽卡</option>
+                  <option value="视频剪辑">视频剪辑</option>
+                  <option value="运营">运营</option>
+                  <option value="自定义">自定义</option>
+                </select>
+              </label>
+              <label class="hidden-field" id="customRoleField">
+                <span>自定义角色</span>
+                <input name="customRole" placeholder="填写流程角色" />
+              </label>
+              <label>
+                <span>工作内容</span>
+                <input name="task" placeholder="例如：第3集镜头生成与重绘" required />
+              </label>
+              <label>
+                <span>今日预计制作时间(小时)</span>
+                <input type="number" name="estimatedHours" min="0.5" step="0.5" value="2" required />
+              </label>
+              <label>
+                <span>优先级</span>
+                <select name="priority" required>
+                  <option value="高">高</option>
+                  <option value="中" selected>中</option>
+                  <option value="低">低</option>
+                </select>
+              </label>
+              <label>
+                <span>状态</span>
+                <select name="status" required>
+                  <option value="进行中">进行中</option>
+                  <option value="待审核">待审核</option>
+                  <option value="已完成">已完成</option>
+                  <option value="有风险">有风险</option>
+                </select>
+              </label>
+              <button type="submit" class="form-submit">新增工作</button>
+            </form>
+            <div class="member-workspace">
+              <div class="member-tabs" id="workMemberTabs" aria-label="成员工作看板切换"></div>
+              <div id="workMemberPanel"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="dramas">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Drama Production</p>
+              <h2>每部剧制作记录表格</h2>
+            </div>
+            <button class="ghost-button" type="button" id="exportDramaExcel">导出Excel</button>
+          </div>
+          <form class="entry-form drama-form" id="dramaForm">
+            <label>
+              <span>剧名</span>
+              <select name="titleSelect" id="dramaTitleSelect" required>
+                <option value="__new__">新增剧名</option>
+              </select>
+            </label>
+            <label class="hidden-field" id="newDramaTitleField">
+              <span>新增剧名</span>
+              <input name="title" placeholder="例如：赛博茶馆" />
+            </label>
+            <label>
+              <span>集数</span>
+              <input type="number" name="episode" min="1" value="1" required />
+            </label>
+            <label>
+              <span>阶段</span>
+              <select name="stage" required>
+                <option value="剧本">剧本</option>
+                <option value="分镜">分镜</option>
+                <option value="画面生成">画面生成</option>
+                <option value="配音配乐">配音配乐</option>
+                <option value="剪辑">剪辑</option>
+                <option value="发布">发布</option>
+              </select>
+            </label>
+            <label class="member-field">
+              <span>负责人</span>
+              <select name="ownerSelect" id="dramaOwnerSelect" required>
+                <option value="__new__">新增负责人</option>
+              </select>
+            </label>
+            <label class="hidden-field" id="newDramaOwnerField">
+              <span>新增负责人</span>
+              <input name="owner" placeholder="成员姓名或岗位" />
+            </label>
+            <label>
+              <span>截止日期</span>
+              <input type="date" name="deadline" required />
+            </label>
+            <label>
+              <span>进度</span>
+              <input type="number" name="progress" min="0" max="100" value="0" required />
+            </label>
+            <button type="submit" class="form-submit">新增剧集记录</button>
+          </form>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>剧名</th>
+                  <th>集数</th>
+                  <th>阶段</th>
+                  <th>负责人</th>
+                  <th>截止日期</th>
+                  <th>进度(可调)</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="dramaTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel" id="tools">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Tool Usage</p>
+              <h2>每日工具使用情况与Token消耗</h2>
+            </div>
+          </div>
+          <form class="entry-form tool-form" id="toolForm">
+            <label>
+              <span>日期</span>
+              <input type="date" name="date" required />
+            </label>
+            <label>
+              <span>成员</span>
+              <input name="member" placeholder="例如：小周" required />
+            </label>
+            <label>
+              <span>工具</span>
+              <select name="toolSelect" id="toolSelect" required>
+                <option value="ChatGPT">ChatGPT</option>
+                <option value="Midjourney">Midjourney</option>
+                <option value="Runway">Runway</option>
+                <option value="可灵">可灵</option>
+                <option value="剪映">剪映</option>
+                <option value="Suno">Suno</option>
+                <option value="__new__">自定义工具</option>
+              </select>
+            </label>
+            <label class="hidden-field" id="newToolField">
+              <span>自定义工具名称</span>
+              <input name="tool" placeholder="例如：ComfyUI" />
+            </label>
+            <label>
+              <span>用途</span>
+              <input name="purpose" placeholder="例如：生成镜头提示词" required />
+            </label>
+            <label>
+              <span>Token</span>
+              <input type="number" name="tokens" min="0" step="100" value="2000" required />
+            </label>
+            <button type="submit" class="form-submit">新增工具记录</button>
+          </form>
+          <div class="usage-layout">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>成员</th>
+                    <th>工具</th>
+                    <th>用途</th>
+                    <th>Token</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="toolTable"></tbody>
+              </table>
+            </div>
+            <div class="usage-panel">
+              <h3>工具消耗排行</h3>
+              <div id="toolChart" class="bar-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="board">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Team Dashboard</p>
+              <h2>团队看板与每周可视化</h2>
+            </div>
+            <div class="segmented" aria-label="看板筛选">
+              <button class="active" type="button" data-board="daily">每日</button>
+              <button type="button" data-board="weekly">每周</button>
+            </div>
+          </div>
+          <div class="board-grid" id="memberBoard"></div>
+          <div class="weekly-viz-grid">
+            <article class="viz-card">
+              <h3>成员完成度</h3>
+              <div id="weeklyMemberChart" class="bar-list"></div>
+            </article>
+            <article class="viz-card">
+              <h3>每日任务趋势</h3>
+              <div id="weeklyTrendChart" class="trend-list"></div>
+            </article>
+            <article class="viz-card">
+              <h3>优先级分布</h3>
+              <div id="weeklyPriorityChart" class="bar-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="history">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">History Board</p>
+              <h2>每日工作记录历史看板</h2>
+            </div>
+            <a class="ghost-button history-link" href="./history.html">点击进入历史记录页面</a>
+          </div>
+          <div class="empty">历史记录已迁移到独立页面，支持筛选与导出。</div>
+        </section>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
