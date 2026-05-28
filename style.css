@@ -871,7 +871,7 @@ tbody tr:last-child td {
 
 .usage-layout {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 300px;
   gap: 14px;
 }
 
@@ -880,10 +880,18 @@ tbody tr:last-child td {
 }
 
 .usage-panel {
-  padding: 16px;
+  padding: 18px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #f7fafb;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.usage-panel h3,
+.usage-panel > p:first-of-type {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
 }
 
 .bar-item {
@@ -898,11 +906,22 @@ tbody tr:last-child td {
   font-size: 13px;
 }
 
+.bar-top strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.bar-top span {
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
 .bar-track {
-  height: 9px;
+  height: 10px;
   overflow: hidden;
   border-radius: 999px;
-  background: #dfe8ec;
+  background: #eef2f5;
 }
 
 .bar-track span {
