@@ -648,6 +648,7 @@ button:disabled {
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 th,
@@ -765,6 +766,10 @@ tbody tr:last-child td {
   display: grid;
   grid-template-columns: 1fr 280px;
   gap: 14px;
+}
+
+.usage-layout .table-wrap {
+  width: 100%;
 }
 
 .usage-panel {
