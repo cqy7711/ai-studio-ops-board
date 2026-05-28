@@ -44,7 +44,7 @@ const els = {
   exportDramaExcel: document.querySelector("#exportDramaExcel"),
   weeklyMemberChart: document.querySelector("#weeklyMemberChart"),
   weeklyTrendChart: document.querySelector("#weeklyTrendChart"),
-  weeklyPriorityChart: document.querySelector("#weeklyPriorityChart"),
+  weeklyTokenChart: document.querySelector("#weeklyTokenChart"),
   collabForm: document.querySelector("#collabForm"),
   collabUrl: document.querySelector("#collabUrl"),
   collabAnonKey: document.querySelector("#collabAnonKey"),
@@ -431,25 +431,23 @@ function renderWeeklyVisualization() {
         .join("")
     : `<div class="empty">本周暂无任务趋势数据</div>`;
 
-  const priorityMap = { 高: 0, 中: 0, 低: 0 };
-  for (const item of weeklyWork) {
-    const key = ["高", "中", "低"].includes(item.priority) ? item.priority : "中";
-    priorityMap[key] += 1;
-  }
-  const maxPriority = Math.max(1, ...Object.values(priorityMap));
+  const weeklyTools = state.tools.filter((item) => inCurrentWeek(item.date));
+  const tokenByMember = groupTotals(weeklyTools, "member", "tokens");
+  const maxToken = Math.max(1, ...Object.values(tokenByMember));
 
-  els.weeklyPriorityChart.innerHTML = Object.values(priorityMap).some((value) => value > 0)
-    ? Object.entries(priorityMap)
+  els.weeklyTokenChart.innerHTML = Object.keys(tokenByMember).length
+    ? Object.entries(tokenByMember)
+        .sort((a, b) => b[1] - a[1])
         .map(
-          ([priority, count]) => `
+          ([member, tokens]) => `
             <div class="bar-item">
-              <div class="bar-top"><strong>${priority}优先</strong><span>${count}项</span></div>
-              <div class="bar-track"><span style="width:${(count / maxPriority) * 100}%"></span></div>
+              <div class="bar-top"><strong>${escapeHtml(member)}</strong><span>${formatNumber(tokens)}</span></div>
+              <div class="bar-track"><span style="width:${(tokens / maxToken) * 100}%"></span></div>
             </div>
           `,
         )
         .join("")
-    : `<div class="empty">本周暂无优先级数据</div>`;
+    : `<div class="empty">本周暂无Token消耗数据</div>`;
 }
 
 function progressMarkup(value) {

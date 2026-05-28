@@ -264,6 +264,8 @@ h3 {
 
 .work-entry-form {
   position: static;
+  grid-template-columns: 1fr;
+  align-items: stretch;
 }
 
 .collab-panel {
@@ -394,6 +396,7 @@ button:disabled {
 
 .member-workspace {
   display: grid;
+  min-width: 0;
   gap: 14px;
   padding: 14px;
   border: 1px solid var(--line);
@@ -461,6 +464,8 @@ button:disabled {
 }
 
 .member-work-card {
+  min-width: 0;
+  overflow: hidden;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -505,6 +510,7 @@ button:disabled {
 
 .work-item-list {
   display: grid;
+  min-width: 0;
   gap: 10px;
   margin-top: 16px;
 }
@@ -512,12 +518,17 @@ button:disabled {
 .work-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  min-width: 0;
   gap: 16px;
   align-items: center;
   padding: 13px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
+}
+
+.work-item > div {
+  min-width: 0;
 }
 
 .work-item strong,
@@ -537,7 +548,8 @@ button:disabled {
 
 .work-item-side {
   display: grid;
-  grid-template-columns: minmax(120px, 150px) minmax(120px, 1fr) minmax(130px, 170px);
+  grid-template-columns: minmax(110px, 140px) minmax(0, 1fr) minmax(120px, 160px);
+  min-width: 0;
   gap: 10px;
   align-items: center;
 }
